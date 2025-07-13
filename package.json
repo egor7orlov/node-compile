@@ -1,0 +1,33 @@
+{
+  "name": "compile",
+  "version": "1.0.0",
+  "description": "Literally just an execution of commands from Node.js docs on SEA",
+  "keywords": [
+    "node",
+    "compile",
+    "executable",
+    "sea"
+  ],
+  "homepage": "https://github.com/egor7orlov/node-compile#readme",
+  "bugs": {
+    "url": "https://github.com/egor7orlov/node-compile/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egor7orlov/node-compile.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "author": "Yehor Orlov <egor7orlov@gmail.com>",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --outfile=dist/index.js --minify"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13",
+    "esbuild": "0.25.6",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  }
+}
