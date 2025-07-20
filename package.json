@@ -20,7 +20,8 @@
   "author": "Yehor Orlov <egor7orlov@gmail.com>",
   "main": "src/index.ts",
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --outfile=dist/index.js --minify"
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node24 --outfile=dist/compile.js --minify",
+    "start": "node dist/compile.js"
   },
   "devDependencies": {
     "@types/node": "^24.0.13",

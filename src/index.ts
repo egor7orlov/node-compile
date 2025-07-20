@@ -1,22 +1,21 @@
-import { Command } from 'commander';
-import * as fs from 'node:fs';
-import * as fsAsync from 'node:fs/promises';
+import fsAsync from 'node:fs/promises';
 import path from 'node:path';
+import { tmpdir } from 'node:os';
 import { exec } from 'child_process';
 import { promisify } from 'node:util';
+import { Command } from 'commander';
 
 const execAsync = promisify(exec);
 
+const PROGRAM_NAME = 'node-compile';
 const program = new Command()
-  .name('node-compile')
+  .name(PROGRAM_NAME)
   .description(
     'Literally just an execution of commands from Node.js docs on SEA',
   )
   .version('1.0.0')
   .argument('<in>')
   .argument('[out]');
-
-const TEMP_FOLDER = '/tmp/node-compile';
 const SEA_CFG_FILENAME = 'sea-config.json';
 const BLOB_FILENAME = 'a.blob';
 
@@ -37,12 +36,14 @@ Input JavaScript file: ${path.resolve(inputJsPath)}
 Output executable: ${path.resolve(outExecPath)}`,
     );
 
-    if (!fs.existsSync(TEMP_FOLDER)) {
-      await fsAsync.mkdir(TEMP_FOLDER);
-    }
+    const tempDirPath = await fsAsync.mkdtemp(
+      path.join(tmpdir(), `${PROGRAM_NAME}-`),
+    );
 
-    const seaCfgPath = path.join(TEMP_FOLDER, SEA_CFG_FILENAME);
-    const blobPath = path.join(TEMP_FOLDER, BLOB_FILENAME);
+    console.log('Temp frolder: ', tempDirPath);
+
+    const seaCfgPath = path.join(tempDirPath, SEA_CFG_FILENAME);
+    const blobPath = path.join(tempDirPath, BLOB_FILENAME);
     const seaCfg = {
       main: inputJsPath,
       output: blobPath,
@@ -71,8 +72,6 @@ Output executable: ${path.resolve(outExecPath)}`,
     }
   } catch (err: any) {
     console.error(err);
-  } finally {
-    await fsAsync.rm(TEMP_FOLDER, { force: true, recursive: true });
   }
 }
 
